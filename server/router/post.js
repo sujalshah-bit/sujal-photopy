@@ -32,6 +32,27 @@ router.get('/my-posts', authenticateUser,async (req, res) => {
     res.status(500).json({ message: 'Internal server error' });
   }
 });
+router.get('/:id', authenticateUser, async (req, res) => {
+  try {
+    const postId = req.params.id;
+    const post = await Post.findById(postId)
+      .populate('createdBy', 'username') // Populating createdBy with the 'username' field
+      .populate({
+        path: 'comments',
+        populate: { path: 'user', select: 'username' }, // Populating user information for comments
+      });
+
+    if (!post) {
+      return res.status(404).json({ message: 'Post not found' });
+    }
+
+    res.json(post);
+  } catch (err) {
+    console.log(`error`, err);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
 
 // Create a new post
 router.post('/', authenticateUser,async (req, res) => {
@@ -98,40 +119,47 @@ router.delete('/:postId', authenticateUser,async (req, res) => {
 });
 
 // Like a post
-router.post('/:postId/like',authenticateUser, async (req, res) => {
+router.post('/:postId/like', authenticateUser, async (req, res) => {
   try {
     const postId = req.params.postId;
     const userId = req.user;
-
-    // console.log(postId,userId);
-    // Check if the user has already liked the post if Liked remove it
-    const existingLike = await Like.findOneAndRemove({ post: postId, user: userId });
-    // console.log(existingLike)
-    if (existingLike) {
-
-      // Remove the like reference from the post
-      const post = await Post.findById(postId);
-      post.likes = post.likes.filter((like) => !like._id.equals(existingLike._id));
+    // console.log(userId);
+    // Check if the user has already liked the post
+    const isLiked = await Like.find({
+      $and: [
+        { user: userId },
+        { post: postId },
+      ]
+    })
+    const post = await Post.findById(postId)
+    // const isLiked = post.likes.user.some((like) => like.equals(userId));
+    // console.log("Empty",isLiked)
+    if (isLiked && isLiked.length > 0) {
+      const likesId = isLiked[0]._id
+      // If the post is already liked, then unlike it
+      post.likes = post.likes.filter((like) => !like.equals(likesId));
       await post.save();
+
+      // Delete the corresponding like record
+      await Like.findOneAndDelete({ post: postId, user: userId });
 
       return res.json({ message: 'Post unliked successfully' });
     } else {
       // If the user hasn't liked the post, create a new like record
-      // console.log('like');
       const like = new Like({ post: postId, user: userId });
       await like.save();
 
-      const post = await Post.findById(postId);
-      post.likes.push(like);
+      post.likes.push(like._id);
       await post.save();
 
       return res.json({ message: 'Post liked successfully' });
     }
   } catch (err) {
-    console.log(err);
+    console.error(err);
     res.status(500).json({ message: 'Internal server error' });
   }
 });
+
 
 
 // Comment on a post

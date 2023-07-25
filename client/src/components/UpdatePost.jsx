@@ -31,12 +31,12 @@ const UpdatePost = ({ postId }) => {
   };
   return (
     <div>
-      <h2>Update Post</h2>
-      <div>
-        <input type="text" placeholder="Image URL" value={image} onChange={(e) => setImage(e.target.value)} />
-        <input type="text" placeholder="Slug" value={slug} onChange={(e) => setSlug(e.target.value)} />
-        <input type="text" placeholder="Tags (comma-separated)" value={tags} onChange={(e) => setTags(e.target.value)} />
-        <button onClick={handleUpdate}>Update</button>
+      <h2 className='text-2xl text-center p-3  tracking-wider'><strong>Update Post</strong></h2>
+      <div className='flex flex-col  gap-3'>
+        <input className='p-1 outline-none border bg-[#1E293B] border-gray-400' type="text" placeholder="Image URL" value={image} onChange={(e) => setImage(e.target.value)} />
+        <input className='p-1 outline-none border bg-[#1E293B] border-gray-400' type="text" placeholder="Slug" value={slug} onChange={(e) => setSlug(e.target.value)} />
+        <input className='p-1 outline-none border bg-[#1E293B] border-gray-400' type="text" placeholder="Tags (comma-separated)" value={tags} onChange={(e) => setTags(e.target.value)} />
+        <button className='bg-rose-600 p-3 md:self-start md:rounded' onClick={handleUpdate}>Update</button>
       </div>
     </div>
   );

@@ -30,13 +30,13 @@ router.post('/register', async (req, res) => {
 router.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body;
-    console.log(email,password);
+    // console.log(email,password);
     const user = await User.findOne({ email });
-    console.log(user);
+    // console.log(user);
     if (!user) return res.status(401).json({ message: 'Invalid credentials' });
     
     const isPasswordValid = await bcrypt.compare(password, user.password);
-    console.log(isPasswordValid);
+    // console.log(isPasswordValid);
     if (!isPasswordValid) return res.status(401).json({ message: 'Invalid credentials' });
     console.log("before token");
     // Create a JWT token and send it back to the client

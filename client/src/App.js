@@ -10,11 +10,13 @@ import LoginForm from "./components/LoginForm";
 import NotFoundPage from "./components/NotFoundPage";
 import UserProvider from "./store/context";
 import { useEffect, useState } from "react";
-import UploadImageForm from "./components/UploadImageForm ";
 import HomePage from "../src/components/HomePage";
 import Cookies from "js-cookie";
 import axios from "axios";
 import MyPostsPage from "./components/MyPostPage";
+import Navigation from "./components/Navigation";
+import ProductDetail from "./components/ProductDetail";
+
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(
@@ -37,9 +39,10 @@ function App() {
 
   return (
     <UserProvider>
-      app s {loggedIn.toString()}
       <Router>
+        <Navigation loggedIn={loggedIn} handleLogout={handleLogout} />
         <Routes>
+          <Route path="/" element={<HomePage  />} />
           <Route
             path="/login"
             element={
@@ -60,23 +63,13 @@ function App() {
               )
             }
           />
-          <Route
+          {/* <Route
             path="/upload"
             element={loggedIn ? <UploadImageForm /> : <Navigate to="/login" />}
-          />
-          {/* <Route
-            path="/"
-            element={
-              loggedIn ? (
-                <HomePage handleLogout={handleLogout} />
-              ) : (
-                <Navigate to="/login" />
-              )
-            }
           /> */}
-          <Route path="/" element={<HomePage handleLogout={handleLogout} />} />
+          <Route path="/:id" element={<ProductDetail />} />
           <Route
-            path="/mypost"
+            path="/myposts"
             element={
               loggedIn ? (
                 <MyPostsPage handleLogout={handleLogout} />
