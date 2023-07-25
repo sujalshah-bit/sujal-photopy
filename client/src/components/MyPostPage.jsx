@@ -5,14 +5,14 @@ import DeletePost from './DeletePost';
 import { AiOutlineHeart, AiFillHeart } from 'react-icons/ai';
 
 
-const MyPostsPage = ({ handleLogout }) => {
+const MyPostsPage = () => {
   const [myPosts, setMyPosts] = useState([]);
   const [showUpdate, setShowUpdate] = useState(false); // State variable to toggle update section
   const [updatePostId, setUpdatePostId] = useState(null); // State variable to store the post ID being updated
 
   useEffect(() => {
     // Fetch the user's uploaded photos
-    axios.get('http://localhost:5000/posts/my-posts', {
+    axios.get('https://sujal-photopy-api.vercel.app/posts/my-posts', {
       withCredentials: true, // Send the user's cookies for authentication
     })
       .then((response) => {

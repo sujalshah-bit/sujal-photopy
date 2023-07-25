@@ -24,7 +24,7 @@ const PostDetail = () => {
   useEffect(() => {
     // Fetch the post details using the postId
     axios
-      .get(`http://localhost:5000/posts/${id}`)
+      .get(`https://sujal-photopy-api.vercel.app/posts/${id}`)
       .then((response) => {
         setPost(response.data);
       })
@@ -40,13 +40,13 @@ const PostDetail = () => {
     try {
       // Send a POST request to like/unlike the post
       const response = await axios.post(
-        `http://localhost:5000/posts/${postId}/like`
+        `https://sujal-photopy-api.vercel.app/posts/${postId}/like`
       );
       setMessage(response.data.message);
       // Store the message in localStorage
       localStorage.setItem("message", response.data.message);
       // Refresh the posts after successfully liking/unliking the post
-      axios.get(`http://localhost:5000/posts/${id}`).then((response) => {
+      axios.get(`https://sujal-photopy-api.vercel.app/posts/${id}`).then((response) => {
         setPost(response.data);
       });
     } catch (error) {
@@ -56,11 +56,11 @@ const PostDetail = () => {
   const handleAddComment = async (e) => {
     e.preventDefault();
     try {
-      await axios.post(`http://localhost:5000/posts/${id}/comment`, {
+      await axios.post(`https://sujal-photopy-api.vercel.app/posts/${id}/comment`, {
         text: newComment,
       });
       // Refresh the post details after adding the comment
-      axios.get(`http://localhost:5000/posts/${id}`).then((response) => {
+      axios.get(`https://sujal-photopy-api.vercel.app/posts/${id}`).then((response) => {
         setPost(response.data);
         setNewComment("");
       });

@@ -19,7 +19,7 @@ const UpdatePost = ({ postId }) => {
       setSlug(slug);
       setTags(tags);
 
-      const response = await axios.put(`http://localhost:5000/posts/${postId}`, updatedPost);
+      const response = await axios.put(`https://sujal-photopy-api.vercel.app/posts/${postId}`, updatedPost);
       console.log(response.data); // Updated post data
 
       // Update the state with the response from the server

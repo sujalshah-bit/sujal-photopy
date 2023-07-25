@@ -32,7 +32,7 @@ const PostTweetButton = () => {
 
     try {
       // console.log(data);
-      const response = await axios.post("http://localhost:5000/posts", data);
+      const response = await axios.post("https://sujal-photopy-api.vercel.app/posts", data);
       console.log("statuscode", response.status); // Newly created post data from the server
       // Optionally, you can update the state to clear the form after a successful upload.
       setImage("");

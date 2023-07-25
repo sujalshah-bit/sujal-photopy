@@ -14,7 +14,7 @@ const RegistrationForm = ({ setLoggedIn }) => {
   const handleRegister  = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:5000/auth/register', { username, email, password });
+      const response = await axios.post('https://sujal-photopy-api.vercel.app/auth/register', { username, email, password });
       console.log(response.data.message); // Registration successful
       // Redirect to login page or show a success message
       navigate('/login')

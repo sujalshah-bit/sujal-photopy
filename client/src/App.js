@@ -72,7 +72,7 @@ function App() {
             path="/myposts"
             element={
               loggedIn ? (
-                <MyPostsPage handleLogout={handleLogout} />
+                <MyPostsPage />
               ) : (
                 <Navigate to="/login" />
               )

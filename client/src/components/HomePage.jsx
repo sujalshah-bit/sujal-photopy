@@ -19,7 +19,7 @@ const HomePage = () => {
   useEffect(() => {
     // Fetch all posts
     axios
-      .get("http://localhost:5000/posts")
+      .get("https://sujal-photopy-api.vercel.app/posts")
       .then((response) => {
         setPosts(response.data);
       })
@@ -36,13 +36,13 @@ const HomePage = () => {
     try {
       // Send a POST request to like/unlike the post
       const response = await axios.post(
-        `http://localhost:5000/posts/${postId}/like`
+        `https://sujal-photopy-api.vercel.app/posts/${postId}/like`
       );
       setMessage(response.data.message);
       // Store the message in localStorage
       localStorage.setItem("message", response.data.message);
       // Refresh the posts after successfully liking/unliking the post
-      axios.get("http://localhost:5000/posts").then((response) => {
+      axios.get("https://sujal-photopy-api.vercel.app/posts").then((response) => {
         setPosts(response.data);
       });
     } catch (error) {

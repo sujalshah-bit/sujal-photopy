@@ -13,7 +13,7 @@ const LoginForm = ({ setLoggedIn }) => {
   const handleLogin  = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:5000/auth/login',{ email, password });
+      const response = await axios.post('https://sujal-photopy-api.vercel.app/auth/login',{ email, password });
       const { token } = response.data;
       console.log(response.data.message); // Login successful
 

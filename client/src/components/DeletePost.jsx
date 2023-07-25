@@ -7,7 +7,7 @@ const DeletePost = ({ postId }) => {
   const navigate = useNavigate()
   const handleDelete = async () => {
     try {
-      const response = await axios.delete(`http://localhost:5000/posts/${postId}`);
+      const response = await axios.delete(`https://sujal-photopy-api.vercel.app/posts/${postId}`);
       console.log(response); // Post deleted successfully
       navigate('/')
       // Perform any additional actions after successful deletion, if needed
