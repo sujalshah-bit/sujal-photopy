@@ -4,7 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import {  FiMessageCircle, FiSend } from "react-icons/fi";
 import { getTimeDifferenceString } from "../utility/timeDifference";
 import { TailSpin } from "react-loader-spinner";
-import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
+// import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import { useMediaQuery } from '@react-hook/media-query';
 
 const PostDetail = () => {
@@ -13,11 +13,11 @@ const PostDetail = () => {
   const [post, setPost] = useState(null);
   const [newComment, setNewComment] = useState("");
   const [toggleComment, setToggleComment] = useState("");
-  const [message, setMessage] = useState(() => {
-    // Get the initial value from localStorage if it exists
-    const storedMessage = localStorage.getItem("message");
-    return storedMessage || "Post Unlike Successfully";
-  });
+  // const [message, setMessage] = useState(() => {
+  //   // Get the initial value from localStorage if it exists
+  //   const storedMessage = localStorage.getItem("message");
+  //   return storedMessage || "Post Unlike Successfully";
+  // });
 
   
 
@@ -36,23 +36,23 @@ const PostDetail = () => {
       });
   }, [id]);
   
-  const handleLike = async (postId) => {
-    try {
-      // Send a POST request to like/unlike the post
-      const response = await axios.post(
-        `https://sujal-photopy-api.vercel.app/posts/${postId}/like`
-      );
-      setMessage(response.data.message);
-      // Store the message in localStorage
-      localStorage.setItem("message", response.data.message);
-      // Refresh the posts after successfully liking/unliking the post
-      axios.get(`https://sujal-photopy-api.vercel.app/posts/${id}`).then((response) => {
-        setPost(response.data);
-      });
-    } catch (error) {
-      console.error("Error liking/unliking the post:", error);
-    }
-  };
+  // const handleLike = async (postId) => {
+  //   try {
+  //     // Send a POST request to like/unlike the post
+  //     const response = await axios.post(
+  //       `https://sujal-photopy-api.vercel.app/posts/${postId}/like`
+  //     );
+  //     setMessage(response.data.message);
+  //     // Store the message in localStorage
+  //     localStorage.setItem("message", response.data.message);
+  //     // Refresh the posts after successfully liking/unliking the post
+  //     axios.get(`https://sujal-photopy-api.vercel.app/posts/${id}`).then((response) => {
+  //       setPost(response.data);
+  //     });
+  //   } catch (error) {
+  //     console.error("Error liking/unliking the post:", error);
+  //   }
+  // };
   const handleAddComment = async (e) => {
     e.preventDefault();
     try {
@@ -89,21 +89,24 @@ const PostDetail = () => {
   }
 
     const CodeA = (
-      <div className="max-w-screen-xl mx-auto h-[60vh] mt-8 md:flex md:max-w-screen-lg rounded-md shadow-md text-white bg-[#1E293B]">
+      <div className="max-w-screen-xl mx-auto h-[85vh] mt-8 md:flex md:max-w-screen-lg rounded-md shadow-md text-white bg-[#1E293B]">
       {/* Box 1: Image */}
-      <div className="md:w-1/2 h-[60vh] ">
+      <div className="md:w-1/2 h-[85vh] ">
         <img
           src={post.image}
           alt={post.slug}
-          className="w-full   h-[60vh] rounded-md"
+          className="w-full   h-[85vh] rounded-md"
         />
       </div>
 
       {/* Box 2: User info and post info */}
       <div className="md:w-1/2 p-4 flex flex-col  gap-9">
+          <div className="flex  flex-col">
+            <span className="font-semibold text-2xl">{post?.slug}</span>
+            </div>
         <div className="flex items-center  justify-between mt-4 bg-[#1E293B]">
           <div className="flex  flex-col">
-            <span className="font-semibold text-2xl">{post.createdBy?.username}</span>
+            <span className="font-semibold text-xl">{post.createdBy?.username}</span>
           <div >
           <span className="font-semibold text-gray-500">
             {getTimeDifferenceString(post.createdAt)}
@@ -118,7 +121,7 @@ const PostDetail = () => {
               onClick={() => setToggleComment(!toggleComment)}
             />
 
-            <button
+            {/* <button
               className={`${
                 message === "Post liked successfully"
                   ? "text-red-500 "
@@ -131,8 +134,8 @@ const PostDetail = () => {
               ) : (
                 <AiOutlineHeart size={30} />
               )}
-            </button>
-        <span className="font-semibold">{post?.likes?.length} likes</span>
+            </button> */}
+        <span className="font-semibold text-[20px]">{post?.likes?.length} likes</span>
           </div>
         </div>
         
@@ -192,7 +195,7 @@ const PostDetail = () => {
 
         <div onClick={() => setToggleComment(true)} className="mt-2 overflow-y-scroll h-64 pl-2  bg-gray-900 ">
           {post?.comments?.map((comment) => (
-            <div key={comment.id} className="mb-2">
+            <div key={comment.id} className="mb-2 py-2 px-3">
               <span className="font-semibold">{comment?.user?.username}:</span>
               <span className="ml-1">{comment.text}</span>
             </div>
@@ -208,10 +211,13 @@ const PostDetail = () => {
       <img
         src={post.image}
         alt={post.slug}
-        className="w-full h-64 object-cover rounded-md"
+        className="w-full h-80 object-cover rounded-md"
       />
       <div></div>
       <div className="p-4">
+          <div className="flex items-center">
+            <span className=" font-semibold text-xl">{post.slug}</span>
+          </div>
         <div className="flex items-center justify-between mt-4 bg-[#1E293B]">
           <div className="flex items-center">
             <span className=" font-semibold text-lg">{post.createdBy?.username}</span>
@@ -223,7 +229,7 @@ const PostDetail = () => {
               onClick={() => setToggleComment(!toggleComment)}
             />
 
-            <button
+            {/* <button
               className={`${
                 message === "Post liked successfully"
                   ? "text-red-500 "
@@ -236,7 +242,7 @@ const PostDetail = () => {
               ) : (
                 <AiOutlineHeart size={30} />
               )}
-            </button>
+            </button> */}
           </div>
         </div>
         <div className="mt-2 ">
@@ -245,7 +251,7 @@ const PostDetail = () => {
           </span>
         </div>
         <div className="mt-2"></div>
-        <span className="font-semibold">{post?.likes?.length} likes</span>
+        <span className="font-semibold text-[20px]">{post?.likes?.length} likes</span>
         {toggleComment ? (
           <div className="fixed top-0 left-0 right-0 bottom-0 bg-gray-900 z-50 flex justify-center items-center">
             <div className=" w-full h-screen rounded-lg p-4 flex flex-col">
@@ -300,7 +306,7 @@ const PostDetail = () => {
 
         <div onClick={() => setToggleComment(true)} className="mt-2 overflow-y-scroll h-28 pl-2  bg-gray-900 ">
           {post?.comments?.map((comment) => (
-            <div key={comment.id} className="mb-2">
+            <div key={comment.id} className="mb-2 py-2 px-3">
               <span className="font-semibold">{comment?.user?.username}:</span>
               <span className="ml-1">{comment.text}</span>
             </div>

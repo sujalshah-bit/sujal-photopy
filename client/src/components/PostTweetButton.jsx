@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { useUserContext } from "../store/context";
 
 const PostTweetButton = () => {
   const navigate = useNavigate();
@@ -8,12 +9,15 @@ const PostTweetButton = () => {
   const [image, setImage] = useState("");
   const [slug, setSlug] = useState("");
   const [tags, setTags] = useState("");
+  const {setModel} = useUserContext()
 
   const handleButtonClick = () => {
+    setModel(true)
     setModalOpen(true);
   };
-
+  
   const handleCloseModal = () => {
+    setModel(false)
     setModalOpen(false);
   };
 

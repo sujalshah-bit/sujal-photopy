@@ -5,23 +5,22 @@ import { TailSpin } from "react-loader-spinner";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import { FaRegComment } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
+import { useUserContext } from "../store/context";
 
 const HomePage = () => {
   const navigate = useNavigate()
   const [posts, setPosts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [message, setMessage] = useState(() => {
-    // Get the initial value from localStorage if it exists
-    const storedMessage = localStorage.getItem("message");
-    return storedMessage || "Post Unlike Successfully";
-  });
-
+  const [likeStates, setLikeStates] = useState([]);
+  const {model} = useUserContext()
   useEffect(() => {
     // Fetch all posts
     axios
       .get("https://sujal-photopy-api.vercel.app/posts")
       .then((response) => {
         setPosts(response.data);
+        // Initialize the likeStates array with the initial like state for each post
+        setLikeStates(response.data.map((post) => post.isLiked));
       })
       .catch((error) => {
         console.error("Error fetching posts:", error);
@@ -32,13 +31,19 @@ const HomePage = () => {
   }, []);
 
   // Function to handle liking a post
-  const handleLike = async (postId) => {
+  const handleLike = async (postId, index) => {
     try {
       // Send a POST request to like/unlike the post
       const response = await axios.post(
         `https://sujal-photopy-api.vercel.app/posts/${postId}/like`
       );
-      setMessage(response.data.message);
+      
+      // Update the like state for the specific post
+      setLikeStates((prevState) => {
+        const newLikeStates = [...prevState];
+        newLikeStates[index] = response.data.message === "Post liked successfully";
+        return newLikeStates;
+      });
       // Store the message in localStorage
       localStorage.setItem("message", response.data.message);
       // Refresh the posts after successfully liking/unliking the post
@@ -73,8 +78,8 @@ const HomePage = () => {
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4 space-y-4 space-x-4">
-          {posts.map((post) => (
-            <div key={post._id} className="relative aspect-w-1 aspect-h-1">
+          {posts.map((post,index) => (
+            <div key={post._id} className={`${model?"-z-10":""} relative aspect-w-1 aspect-h-1`}>
               <div className="w-full h-64 rounded-lg overflow-hidden">
                 <img
                   src={post.image}
@@ -83,19 +88,15 @@ const HomePage = () => {
                 />
               </div>
               <div className="absolute top-2 right-2">
-                <button
+              <button
                   className={`${
-                    message === "Post liked successfully"
+                    likeStates[index]
                       ? "bg-pink-500 text-white"
                       : "bg-red-500 text-white"
                   } rounded-full w-8 h-8 flex items-center justify-center`}
-                  onClick={() => handleLike(post._id)}
+                  onClick={() => handleLike(post._id, index)}
                 >
-                  {message === "Post liked successfully" ? (
-                    <AiFillHeart />
-                  ) : (
-                    <AiOutlineHeart />
-                  )}
+                  {likeStates[index] ? <AiFillHeart /> : <AiOutlineHeart />}
                 </button>
               </div>
               <div className="p-3 bg-[#1E293B] flex items-center rounded-lg mt-2">

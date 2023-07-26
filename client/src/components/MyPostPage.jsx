@@ -3,9 +3,11 @@ import axios from 'axios';
 import UpdatePost from './UpdatePost';
 import DeletePost from './DeletePost';
 import { AiOutlineHeart, AiFillHeart } from 'react-icons/ai';
+import { useNavigate } from 'react-router-dom';
 
 
 const MyPostsPage = () => {
+  const navigate = useNavigate()
   const [myPosts, setMyPosts] = useState([]);
   const [showUpdate, setShowUpdate] = useState(false); // State variable to toggle update section
   const [updatePostId, setUpdatePostId] = useState(null); // State variable to store the post ID being updated
@@ -19,6 +21,9 @@ const MyPostsPage = () => {
         setMyPosts(response.data);
       })
       .catch((error) => {
+        if (error.response.data.message === "Authentication token required") {
+          navigate("/");
+        }
         console.error('Error fetching user posts:', error);
       });
   }, []);
@@ -28,6 +33,19 @@ const MyPostsPage = () => {
     setShowUpdate(!showUpdate);
     setUpdatePostId(postId);
   };
+
+
+  if(myPosts.length < 1){
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <div
+          className="bg-gradient-to-r from-purple-500 to-pink-500 w-500 h-500 text-transparent bg-clip-text text-4xl font-bold flex items-center justify-center"
+        >
+          There is no post yet
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="text-white min-h-screen py-8">

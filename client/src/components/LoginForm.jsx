@@ -7,6 +7,7 @@ import { FaUser,FaLock } from 'react-icons/fa';
 const LoginForm = ({ setLoggedIn }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [message, setMessage] = useState('');
 
   const navigate = useNavigate();
  
@@ -15,7 +16,7 @@ const LoginForm = ({ setLoggedIn }) => {
     try {
       const response = await axios.post('https://sujal-photopy-api.vercel.app/auth/login',{ email, password });
       const { token } = response.data;
-      console.log(response.data.message); // Login successful
+      setMessage(response.data.message); // Login successful
 
       //Set User Info in store
      
@@ -29,7 +30,8 @@ const LoginForm = ({ setLoggedIn }) => {
       sessionStorage.setItem("loggedIn", "true");
       navigate('/')// Redirect to the dashboard page
     } catch (error) {
-      console.log(error.response.data.error); // Error message from the server
+      setMessage(error.response.data.message)
+      console.log(error.response.data.message); // Error message from the server
       // Show error message to the user
     }
   };
@@ -39,6 +41,9 @@ const LoginForm = ({ setLoggedIn }) => {
     <div className="flex items-center justify-center h-screen ">
       <div className="bg-[#1E293B] text-white rounded-lg p-8 shadow-md">
         <h2 className="text-2xl font-bold mb-4 text-center">Login</h2>
+        {
+          (message === 'Invalid credentials') ? (<div className=' my-2 text-rose-500 tracking-wide'>Invalid credentials</div>) : null 
+        }
         <div className="flex items-center border rounded-lg px-4 py-2 mb-4">
           <FaUser className="text-gray-400 mr-2" />
           <input
