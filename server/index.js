@@ -6,7 +6,7 @@ require('dotenv').config({path:'./.env'})
 const { authenticateUser } = require('./middleware/auth');
 const userRoutes = require('./router/user')
 const postRoutes = require('./router/post')
-const swaggerDocument = YAML.load('./swagger.yaml');
+
 
 const PORT = process.env.PORT || 5001
 
