@@ -27,12 +27,17 @@ const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 db.once('open', () => console.log('Connected to MongoDB'));
 
-// Serve Swagger UI at /api-docs
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // Define routes
 app.get('/',(req,res) => res.send("hello World"))
 
+try {
+    // Serve Swagger UI at /api-docs
+    app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+    
+} catch (error) {
+        console.log(error);
+}
 
 
 // Routes
