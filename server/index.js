@@ -6,8 +6,6 @@ require('dotenv').config({path:'./.env'})
 const { authenticateUser } = require('./middleware/auth');
 const userRoutes = require('./router/user')
 const postRoutes = require('./router/post')
-const swaggerUi = require('swagger-ui-express');
-const YAML = require('yamljs');
 const swaggerDocument = YAML.load('./swagger.yaml');
 
 const PORT = process.env.PORT || 5001
@@ -31,13 +29,6 @@ db.once('open', () => console.log('Connected to MongoDB'));
 // Define routes
 app.get('/',(req,res) => res.send("hello World"))
 
-try {
-    // Serve Swagger UI at /api-docs
-    app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-    
-} catch (error) {
-        console.log(error);
-}
 
 
 // Routes
