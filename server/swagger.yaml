@@ -1,0 +1,151 @@
+openapi: 3.0.0
+info:
+  title: Photophy API
+  version: 1.0.0
+  description: API documentation for the Photophy project
+
+servers:
+  - url: http://localhost:3000
+    description: Local development server
+
+paths:
+  /posts:
+    get:
+      summary: Get all posts
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example: []
+    post:
+      summary: Create a new post
+      requestBody:
+        required: true
+        content:
+          application/json:
+            example:
+              image: 'URL_TO_IMAGE'
+              slug: 'post-slug'
+              tags: ['tag1', 'tag2']
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                image: 'URL_TO_IMAGE'
+                slug: 'post-slug'
+                tags: ['tag1', 'tag2']
+                createdBy: 'user-id'
+
+  /posts/{id}:
+    get:
+      summary: Get a specific post by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the post
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                _id: 'post-id'
+                image: 'URL_TO_IMAGE'
+                slug: 'post-slug'
+                tags: ['tag1', 'tag2']
+                createdBy: 'user-id'
+                comments: []
+
+    put:
+      summary: Update a post by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the post
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            example:
+              slug: 'updated-slug'
+              tags: ['updated-tag1', 'updated-tag2']
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                _id: 'post-id'
+                image: 'URL_TO_IMAGE'
+                slug: 'updated-slug'
+                tags: ['updated-tag1', 'updated-tag2']
+                createdBy: 'user-id'
+                comments: []
+
+    delete:
+      summary: Delete a post by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the post
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                message: 'Post deleted successfully'
+
+  /posts/{id}/like:
+    post:
+      summary: Like or unlike a post by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the post
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                message: 'Post liked/unliked successfully'
+
+  /posts/{id}/comment:
+    post:
+      summary: Add a comment to a post by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the post
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            example:
+              text: 'This is a comment'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                message: 'Comment added successfully'
